@@ -82,25 +82,35 @@ function drawCalculator() {
 		}
 	}
 
-	document.getElementById("0-3").textContent = "*";
-	document.getElementById("1-0").textContent = "7";
-	document.getElementById("1-1").textContent = "8";
-	document.getElementById("1-2").textContent = "9";
-	document.getElementById("1-3").textContent = "/";
-	document.getElementById("2-0").textContent = "4";
-	document.getElementById("2-1").textContent = "5";
-	document.getElementById("2-2").textContent = "6";
-	document.getElementById("2-3").textContent = "-";
-	document.getElementById("3-0").textContent = "1";
-	document.getElementById("3-1").textContent = "2";
-	document.getElementById("3-2").textContent = "3";
-	document.getElementById("3-3").textContent = "+";
-	document.getElementById("4-0").textContent = "C";
-	document.getElementById("4-1").textContent = "0";
-	document.getElementById("4-2").textContent = ".";
-	document.getElementById("4-3").textContent = "=";
+	let keypadValues = [ "","","","*","7","8","9","/","4","5","6","-","1","2","3","+","C","0",".","="]
 
-	const keys = document.querySelectorAll(".key")
+  let keys = document.querySelectorAll(".key")
+	//
+	keypadValues.forEach( ( keypadValue, index ) => {
+	if (index < keys.length ) {
+		keys[index].textContent = keypadValue;
+	}
+	});
+
+ //	document.getElementById("0-3").textContent = "*";
+ //	document.getElementById("1-0").textContent = "7";
+ //	document.getElementById("1-1").textContent = "8";
+ //	document.getElementById("1-2").textContent = "9";
+ //	document.getElementById("1-3").textContent = "/";
+ //	document.getElementById("2-0").textContent = "4";
+ //	document.getElementById("2-1").textContent = "5";
+ //	document.getElementById("2-2").textContent = "6";
+ //	document.getElementById("2-3").textContent = "-";
+ //	document.getElementById("3-0").textContent = "1";
+ //	document.getElementById("3-1").textContent = "2";
+ //	document.getElementById("3-2").textContent = "3";
+ //	document.getElementById("3-3").textContent = "+";
+ //	document.getElementById("4-0").textContent = "C";
+ //	document.getElementById("4-1").textContent = "0";
+ //	document.getElementById("4-2").textContent = ".";
+ //	document.getElementById("4-3").textContent = "=";
+
+	keys = document.querySelectorAll(".key")
 	for (let key of keys) {
 		key.addEventListener("click", () => {
 			key.classList.add("key-pressed")
@@ -135,11 +145,11 @@ function drawCalculator() {
 				isSecondSet = false;
 			}
 
-			if (isFirstSet === false && isSecondSet === false) {
+			if (isFirstSet === false && isSecondSet === false && first.length < 13) {
 				first = first.concat(keyed);
 				writeToDisplay(first)}
 
-			if (isFirstSet === true && isSecondSet === false) {
+			if (isFirstSet === true && isSecondSet === false && second.length < 13) {
 				second = second.concat(keyed);
 				writeToDisplay(second)}
 
@@ -148,7 +158,10 @@ function drawCalculator() {
 				isSecondSet = true;
 				let result = operate(operator,first,second)
 				clearDisplay();
-				result = result.toPrecision(13);
+				console.log(String(result).length);
+				if (String(result).length > 8) {
+					result = result.toExponential(8);
+				}
 				writeToDisplay(result);
 				reset();
 			}
