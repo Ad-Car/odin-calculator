@@ -146,8 +146,9 @@ function drawCalculator() {
 			if (keyed === "=" ) {
 				second = second.slice(0,-1);
 				isSecondSet = true;
-				const result = operate(operator,first,second)
+				let result = operate(operator,first,second)
 				clearDisplay();
+				result = result.toPrecision(13);
 				writeToDisplay(result);
 				reset();
 			}
