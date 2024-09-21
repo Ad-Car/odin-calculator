@@ -4,18 +4,16 @@ let isFirstSet;
 let second;
 let isSecondSet;
 let operator;
-let result;
 let isFirstDecimalSet;
 let isSecondDecimalSet;
 
-function clear() {
+function reset() {
 	keyed = "";
 	first = "";
 	isFirstSet = false;
 	second = "";
-	isSecondSet = true;
+	isSecondSet = false;
 	operator = "";
-	result;
 	isFirstDecimalSet = false;
 	isSecondDecimalSet = false;
 }	
@@ -40,7 +38,7 @@ function operate(operator,first,second) {
 		return add(first, second)};
 	if (operator === '-') {
 		return subtract(first, second)};
-	if (operator === 'X') {
+	if (operator === '*') {
 		return multiply(first, second)};
 	if (operator === '/') {
 		return divide(first, second)};
@@ -53,7 +51,6 @@ function writeToDisplay(str){
 function clearDisplay(){
 	writeToDisplay("");
 }
-
 
 function drawCalculator() {
 	const container = document.querySelector("#container");
@@ -81,7 +78,7 @@ function drawCalculator() {
 		}
 	}
 
-	document.getElementById("0-3").textContent = "X";
+	document.getElementById("0-3").textContent = "*";
 	document.getElementById("1-0").textContent = "7";
 	document.getElementById("1-1").textContent = "8";
 	document.getElementById("1-2").textContent = "9";
@@ -102,45 +99,59 @@ function drawCalculator() {
 	const keys = document.querySelectorAll(".key")
 	for (let key of keys) {
 		key.addEventListener("click", () => {
+			key.classList.add("key-pressed")
+		});
+
+		key.addEventListener("mouseout", () => {
+			key.classList.remove("key-pressed")
+		});
+
+		key.addEventListener("click", () => {
 			let keyed = key.textContent;
 			if ( keyed === "C" ) {
-				clear();
-				keyed = ""}
-
-			if ( keyed === "." && ( isFirstDecimalSet | isSecondDecimalSet )) {
-				keyed = ""}
-			if (keyed === "." && !isFirstSet) { isFirstDecimalSet === true };
-			if (keyed === "." && !isSecondSet) { isSecondDecimalSet === true };
+				reset();
+				keyed= ""}
 			
+			if ( keyed === "." ) {
+				if ( isFirstDecimalSet === true && isSecondDecimalSet === true) {
+					keyed = ""};
+				if ( isFirstDecimalSet === true && isFirstSet === false ) {
+					keyed = ""};
+				if ( isFirstSet === false) {
+					isFirstDecimalSet = true}
+				if ( isFirstSet === true && isSecondSet === false ) {
+					isSecondDecimalSet = true}
+			}
 
-			if (["/","+","-","X"].includes(keyed)) {
+			if (["/","+","-","*"].includes(keyed)) {
 				clearDisplay();
 				operator = keyed;
-				console.log(operator);
 				keyed = "";
 				isFirstSet = true;
 				isSecondSet = false;
 			}
-			if (keyed === "=" ) {
-				isSecondSet = true;
-				result = operate(operator,first,second)
-				clearDisplay();
-				writeToDisplay(result);
-			}
-			if (isFirstSet === false) {
+
+			if (isFirstSet === false && isSecondSet === false) {
 				first = first.concat(keyed);
 				writeToDisplay(first)}
 
-			if (isSecondSet === false) {
+			if (isFirstSet === true && isSecondSet === false) {
 				second = second.concat(keyed);
 				writeToDisplay(second)}
+
+			if (keyed === "=" ) {
+				second = second.slice(0,-1);
+				isSecondSet = true;
+				const result = operate(operator,first,second)
+				clearDisplay();
+				writeToDisplay(result);
+				reset();
+			}
+			
 		})
 	}
 }
 
-clear();
+reset();
 drawCalculator();
-///writeToDisplay("0");
-
-
 
