@@ -32,7 +32,7 @@ function multiply(a,b) {
 function divide(a,b) {
 	 let numb = Number(b);
 	if ( numb === 0 ) {
-		return ("Division by zero error!") } else {
+		return ("Error!") } else {
 			return a /b ;
 		}
 };
@@ -158,7 +158,7 @@ function drawCalculator() {
 				isSecondSet = true;
 				let result = operate(operator,first,second)
 				clearDisplay();
-				console.log(String(result).length);
+				
 				if (String(result).length > 8) {
 					result = result.toExponential(8);
 				}
