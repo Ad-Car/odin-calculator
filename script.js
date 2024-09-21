@@ -30,7 +30,11 @@ function multiply(a,b) {
 	return a * b;
 };
 function divide(a,b) {
-	return a / b;
+	 let numb = Number(b);
+	if ( numb === 0 ) {
+		return ("Division by zero error!") } else {
+			return a /b ;
+		}
 };
 
 function operate(operator,first,second) {
